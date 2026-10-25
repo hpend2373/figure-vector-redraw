@@ -1,0 +1,13 @@
+{
+  "name": "sci-figure-vector-redraw",
+  "private": true,
+  "description": "Helper scripts for the sci-figure-vector-redraw Claude skill",
+  "scripts": {
+    "svgo": "svgo --config scripts/svgo.config.cjs",
+    "render": "node scripts/render.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0",
+    "svgo": "3.3.2"
+  }
+}
