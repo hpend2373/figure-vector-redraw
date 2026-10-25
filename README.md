@@ -1,4 +1,4 @@
-# sci-figure-vector-redraw
+# figure-vector-redraw
 
 AI로 생성했거나 래스터로만 있는 **과학 개념도**(예: Input → Deep-learning model → Output 파이프라인 그림)를
 과학적으로 점검하고, 편집 가능한 **16:9 벡터 그림**으로 다시 그리는 Claude 스킬과 보조 스크립트입니다.
@@ -25,7 +25,7 @@ scripts/
 ## 스킬 설치
 
 - **Claude 앱**: 이 저장소의 `SKILL.md`(필요하면 `scripts/` 포함)를 스킬로 추가합니다.
-- **Claude Code**: 폴더째 `~/.claude/skills/sci-figure-vector-redraw/`에 복사합니다.
+- **Claude Code**: 폴더째 `~/.claude/skills/figure-vector-redraw/`에 복사합니다.
 
 ## 작업 흐름 요약
 

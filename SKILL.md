@@ -1,5 +1,5 @@
 ---
-name: "sci-figure-vector-redraw"
+name: "figure-vector-redraw"
 description: "Turn a raster or AI-generated scientific concept figure into a corrected, editable 16:9 vector figure on a Design canvas using the user's traced SVG pieces: audit, layout math, asset slimming, review."
 ---
 

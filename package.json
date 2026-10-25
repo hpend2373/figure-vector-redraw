@@ -1,7 +1,7 @@
 {
-  "name": "sci-figure-vector-redraw",
+  "name": "figure-vector-redraw",
   "private": true,
-  "description": "Helper scripts for the sci-figure-vector-redraw Claude skill",
+  "description": "Helper scripts for the figure-vector-redraw Claude skill",
   "scripts": {
     "svgo": "svgo --config scripts/svgo.config.cjs",
     "render": "node scripts/render.js"
