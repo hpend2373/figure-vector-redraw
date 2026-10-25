@@ -35,36 +35,6 @@ scripts/
 4. **배경·카드**: 회로기판 무늬는 여백과 카드 사이 틈에만, 열마다 카드 배치.
 5. **검토**: 로컬 미리보기를 렌더링해 잘림·정렬·겹침 확인 후 수정.
 
-## 스크립트 사용 예
-
-```bash
-# 준비
-pip install pillow numpy
-npm i svgo@3.3.2 playwright && npx playwright install chromium
-
-# 큰 트레이스 SVG 축소: 조각 → svgo → 병합 → 업로드 크기로 분할
-python3 scripts/svg_split.py raw.svg work/raw --pieces 6
-for f in work/raw_part*.svg; do npx svgo --config scripts/svgo.config.cjs -i "$f" -o "${f%.svg}.min.svg"; done
-python3 scripts/svg_merge.py merged.svg work/raw_part*.min.svg
-python3 scripts/svg_split.py merged.svg upload/art --max-bytes 1500000
-node scripts/render.js stack check.png --width 494 --height 251 upload/art_part*.svg
-
-# 아이콘 제거 (원본 트레이스 좌표계, scale(0.5) 안이면 2배 좌표)
-python3 scripts/svg_remove_boxes.py gat.svg gat_clean.svg --box 170,72,250,146 --mask-ellipse 210,112,46,33
-
-# 공간 지도 재벡터화 (2배 렌더 PNG에서)
-node scripts/render.js svg spatial.svg spatial@2x.png --width 224 --height 239 --scale 2
-python3 scripts/grid_revectorize.py spatial@2x.png st_input.svg --cell 2 --fix 199,104,215,117
-
-# 라벨 배치
-python3 scripts/ring_labels.py --center 1580,646 --radius 174 --size 16 \
-    --label "Citrate:-90.5" --label "α-Ketoglutarate:34" --bounds 1320,1840
-
-# 아트보드 미리보기
-python3 scripts/build_preview.py Artboard.dc.html preview.html --blob-map blobs.json --hole titleTerm="Activity Inference"
-node scripts/render.js page preview.html preview.png --scale 2
-```
-
 ## 참고
 
 - 그림 원본·에셋·데이터는 이 저장소에 포함하지 않습니다.
