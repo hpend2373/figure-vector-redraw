@@ -8,6 +8,8 @@ rebuilds it as a corrected, editable 16:9 vector figure (Claude Design canvas); 
 finishes it: style unification, alignment, whitespace, repeated-glyph cleanup, background, and working with the user's
 own canvas edits and comments.
 
+![A bear redraws a blurry concept diagram as editable vector paths on a tablet](assets/figure-vector-redraw-banner.webp)
+
 ## 구성
 
 ```
