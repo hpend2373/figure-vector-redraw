@@ -6,7 +6,7 @@ stays), swaps /_blob/<id> asset URLs for local files and fills {{holes}}.
 
   python3 scripts/build_preview.py Artboard.dc.html preview.html \
       --blob-map blobs.json --hole titleTerm="Activity Inference"
-  node scripts/render.js page preview.html preview.png --scale 2
+  node scripts/render.js page preview.html preview.png --width 1200 --height 1600 --scale 2
 
 blobs.json maps asset ids to local paths, e.g.
   {"a373b3d3704f7fc97543fa01d4dd89ea": "assets/01_tca_cycle.svg"}

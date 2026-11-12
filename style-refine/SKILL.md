@@ -380,6 +380,7 @@ AI 그림의 순환 도식은 화살표 수가 단계 수와 다르고(TCA 8단�
            --labels "..." --region 1258,166,1866,906 --centre 1549.8,543.2              # 불규칙 고리: radial
    ```
    - 2배 렌더링의 반올림 때문에 ±0.7px 차이는 남습니다. 한 번이면 충분합니다.
+   - `--width`, `--height`에는 실제 아트보드의 픽셀 크기를 넣습니다. 예를 들어 세로형 1200×1600 보드에는 `--width 1200 --height 1600`을 추가합니다.
 7. **카드 안 그림 묶음:** 그림과 라벨 전체의 잉크 범위를 카드 안 남은 공간(제목 아래 ~ 카드 바닥) 가운데에 둡니다.
 8. 줄을 맞추며 생긴 빈 장식 선(배경 회로 등)이 카드 틈 가운데에 오도록 함께 옮깁니다.
 9. `preserve_check.py`로 글자 수가 그대로인지 보고, 전후 비교 이미지를 보냅니다. 마지막에 남은 작은 차이(예: 색 막대 오른쪽 여백 22 vs 16)는 고치지 않고 한 줄로 알립니다.
@@ -410,7 +411,7 @@ python3 scripts/preserve_check.py net_before.svg net_after.svg \
         --art "nodes-|edges-|web-" --ignore-faint 0.3                    # 4a로 평면화한 도식 자산
 python3 scripts/style_audit.py after.svg --skip "umap|network" --md audit_after.md
 python3 scripts/swap_font.py measure after.dc.html --old OLD-R.ttf OLD-B.ttf --new NEW-R.ttf NEW-B.ttf   # 글꼴을 바꿨을 때
-python3 scripts/dc_preview.py after.dc.html blobs.json after.png --scale 2 [--crop x,y,w,h]             # 로컬 미리보기
+python3 scripts/dc_preview.py after.dc.html blobs.json after.png --width 1200 --height 1600 --scale 2  # 세로형 보드 예시
 ```
 
 - `preserve_check`는 "변경 없음"이어야 합니다.
@@ -418,6 +419,7 @@ python3 scripts/dc_preview.py after.dc.html blobs.json after.png --scale 2 [--cr
   - 평면화한 자산에서 후광 같은 옅은 도형이 빠짐으로 나오면, `--ignore-faint`로 다시 확인합니다. 진짜 노드·간선이 빠졌는지 그것으로 구분합니다.
   - 의도한 문구 변경(줄바꿈 하이픈 제거 등)은 "빠짐/추가" 쌍으로 나옵니다. 그 쌍만 있는지 확인합니다.
 - `swap_font.py measure`의 "nowrap 상자 넘침"은 0개여야 합니다.
+- 미리보기의 `--width`, `--height`를 실제 아트보드에 맞춥니다. 특정 영역만 확인할 때는 `--crop x,y,w,h`를 추가합니다.
 - **"안 바뀐 것 같다"고 하면** 다음 순서로 확인합니다.
   1. 라이브 파일을 다시 읽어 새 주소가 들어갔는지 봅니다.
   2. 올린 asset을 내려받아(`read`의 `path`에 asset id) 실제 표시 크기로 렌더링합니다.

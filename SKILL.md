@@ -1,6 +1,6 @@
 ---
 name: "figure-vector-redraw"
-description: "Turn a raster or AI-generated scientific concept figure into a corrected, editable 16:9 vector figure on a Design canvas using the user's traced SVG pieces: audit, layout math, asset slimming, review."
+description: "Turn a raster or AI-generated scientific concept figure into a corrected, editable vector figure at the requested dimensions on a Design canvas using the user's traced SVG pieces: audit, layout math, asset slimming, review."
 ---
 
 # Scientific concept figure -> corrected vector figure on a Design canvas
@@ -26,11 +26,11 @@ Crop regions with PIL and inspect at 2x. Check:
 - Prior art via PubMed (e.g. scFEA, Genome Res 2021, https://doi.org/10.1101/gr.271205.120); cite with DOI.
 Deliver a table (location / problem / fix) plus the open decisions.
 
-## Stage 2 - Canvas and text layout (16:9)
-- Artboard 1920x1080. Reuse the user's artboard; resize it via canvas.json. Keep one artboard in the end ("Artboard 1로 통일").
-- Grid (final board): outer margins 52; columns sized by content with the output widest - input 52-612 (560), model 676-1192 (516), output 1256-1868 (612); 64px gutters hold the flow arrows. Equal-width columns read as templated.
-- Rows: column headers top 40; cards 80-986, split rows at the same height in every column (e.g. top cards end 524, bottom cards start 540); figure title at the bottom, top ~1008, one line.
-- Type: start at the scale the figure ends with, not a small one. Final (NanumBarunGothic, live text): column headers 36 bold #4b5661 / figure title 36 (lead phrase bold) / card titles 28 bold / subtitles and captions 25 #4b5661 / legend 24 (legend title 28 bold) / ring labels 23 / plot annotations and W_i 20-22 / ring centre 32-36 bold. Minimum ~20px at 1920 wide so text survives a half-slide insert. Same-level titles share the same top line per row.
+## Stage 2 - Canvas and text layout
+- Use the requested width and height or the dimensions required by the final destination. Otherwise reuse the existing artboard or source aspect ratio when it suits the content. Choose a layout for the figure if there is no suitable reference size. Set the dimensions in `canvas.json` when needed, and keep one artboard in the end ("Artboard 1로 통일").
+- Size panels and margins for the chosen artboard. Keep the reading order, align related cards and give each panel enough room for its text and graphics. Stack panels vertically when the target width is narrow.
+- In one 1920×1080 slide layout, the outer margins were 52px and the 64px gutters held the flow arrows. Input, model and output columns were 560px, 516px and 612px wide. Column headers started at y=40, cards occupied y=80–986 and the bottom figure title started at about y=1008. Align row splits across related columns when the figure uses more than one row.
+- Set type sizes for the final placement and keep the text editable. In the slide example, NanumBarunGothic column headers and the figure title were 36px, card and legend titles 28px, subtitles and captions 25px, legend text 24px, ring labels 23px, plot annotations 20–22px and ring centre text 32–36px. Check legibility at the actual insertion size. Align same-level titles within each row.
 - One left axis per card: title, subtitle, caption and legend start 16px inside the card, on the same x as the column header above.
 - Undecided terminology -> a data-props enum tweak (e.g. outputTerm: Pathway activity / Metabolic flux) feeding holes in the titles; replace holes with literal text once decided (holes are not editable in the canvas).
 - Measure text with the font actually used on the board before placing it (Liberation Sans has Arial metrics):
@@ -71,7 +71,7 @@ Typical input: vectorizer output with a <mask> alpha layer and 30k-350k paths ("
 - Every column needs a card or it melts into the background. Plot frames 1px #9aa4ad (not black). Flow arrows sit at the vertical centre of the cards they connect.
 
 ## Stage 5 - Review loop
-Build a local preview: take the fragment between <x-dc> and </x-dc>, drop the <helmet> tags, replace /_blob/<id> with local files (keep a blob-id -> local-file map from every upload), fill the holes, render 1920x1080 at 1x and 2x, crop each card. Check: text clipped at the right edge, one left axis per card, row splits equal across columns, bottom captions/legends on one baseline, ring labels at one ink gap, legend not glued to the card bottom, stray background pieces, label overlaps. Report findings ranked by importance; apply them once the user agrees. Send before/after or option images (2-3 strengths side by side) rather than describing them.
+Build a local preview: take the fragment between <x-dc> and </x-dc>, drop the <helmet> tags, replace /_blob/<id> with local files (keep a blob-id -> local-file map from every upload) and fill the holes. Pass the artboard dimensions with `--width` and `--height` to `render.js` or `dc_preview.py`. Use the same dimensions for `ring_label_gap.py` when adjusting ring labels. Render at 1x and 2x and crop each card for review. Check text clipping, left alignment, matching row splits and caption baselines where applicable, even ring label gaps, legend clearance, stray background pieces and label overlaps. Report findings ranked by importance and apply them once the user agrees. Send before/after or option images (2–3 strengths side by side).
 
 ## Build for the finishing stage
 - Text stays live and editable: literal strings in divs, the board font loaded with @font-face, never outlined.

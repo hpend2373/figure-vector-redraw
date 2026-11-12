@@ -10,6 +10,7 @@ Text, size and colour are untouched; only `left`/`top` change (nested, card-rela
       --region 60,170,600,480 --gap 16 --rule axes
 
   --ring-alt / --ring-class   the ring element: an <img alt="..."> or an element with that class
+  --width / --height          artboard dimensions in CSS pixels (default 1920 × 1080)
   --region x0,y0,x1,y1        board box that holds the ring and its labels (labels outside it are ignored,
                               so two rings with the same label names can be handled one at a time)
   --centre cx,cy              ring centre; default = centre of the ring ink's bounding box. Pass the true
@@ -66,11 +67,15 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('src'); ap.add_argument('blobs'); ap.add_argument('out')
     ap.add_argument('--labels', required=True); ap.add_argument('--region', required=True)
+    ap.add_argument('--width', type=int, default=1920, help='artboard width in CSS pixels')
+    ap.add_argument('--height', type=int, default=1080, help='artboard height in CSS pixels')
     ap.add_argument('--ring-alt'); ap.add_argument('--ring-class')
     ap.add_argument('--centre'); ap.add_argument('--gap', type=float, default=16)
     ap.add_argument('--rule', choices=['radial', 'axes'], default='radial')
     ap.add_argument('--ink', type=float, default=200, help='grey level below which a ring pixel counts as ink (0-255)')
     a = ap.parse_args()
+    if a.width < 1 or a.height < 1:
+        ap.error('--width and --height must be positive')
     from playwright.sync_api import sync_playwright
 
     src = open(a.src, encoding='utf-8').read()
@@ -94,7 +99,8 @@ def main():
     html = localise(tagged, a.blobs)
 
     with sync_playwright() as p:
-        b = p.chromium.launch(); page = b.new_page(viewport={'width': 1920, 'height': 1080}, device_scale_factor=S)
+        b = p.chromium.launch()
+        page = b.new_page(viewport={'width': a.width, 'height': a.height}, device_scale_factor=S)
         hide = 'body *{visibility:hidden !important}'
         ring = render(html, hide + '[data-ring],[data-ring] *{visibility:visible !important}', page)
         labs = render(html, hide + '[data-lg]{visibility:visible !important}', page)
